@@ -68,7 +68,6 @@ let allNamesShortUnique = Array.from(
     ));
 
 function formatName(file) {
-    console.log('f: ', file)
     return file
         .replace(/^\d+\.|_|-|\.mp3$/g, ' ')
         .trim();
@@ -123,13 +122,8 @@ function loadNewCard() {
     const newIndex = getRandomFile(currentIndex);
     currentIndex = newIndex;
     cardCounter++;
-    console.log('%%% STZAN1 class: loadNewCard, method: loadNewCard; 2025-04-12');
 
     const file = audioFiles[currentMode][currentIndex];
-    console.log('%%% STZAN2 class: loadNewCard, method: loadNewCard; 2025-04-12, f: ', file);
-    console.log('%%% STZAN2 class: loadNewCard, method: loadNewCard; 2025-04-12, f: ', currentMode);
-    console.log('%%% STZAN2 class: loadNewCard, method: loadNewCard; 2025-04-12, f: ', currentIndex);
-
     const name = formatName(file);
 
 
@@ -179,7 +173,6 @@ function handleAnswerClick(button, chosen, correctShort, correctLong) {
         pauseAudio();
         flipCardToBack(correctLong);
 
-        // Dodaj animację paska ładowania
         nextButton.classList.add('loading-progress');
 
         setTimeout(() => {
@@ -194,14 +187,33 @@ function handleAnswerClick(button, chosen, correctShort, correctLong) {
 }
 
 
+function toggleAnswerVisibility() {
+    if (toggleAnswers.checked) {
+        answerButtons.style.display = 'grid';
+    }
+    else {
+        answerButtons.style.display = 'none';
+    }
+}
+
+
+function switchMode() {
+    currentMode = modeToggle.checked ? 'pluca' : 'serce';
+    currentIndex = -1;
+    allNamesShortUnique = Array.from(
+        new Set(audioFiles[currentMode].map(formatName).map(name => getFirstWords(name, 2)))
+    );
+    loadNewCard();
+}
+
 flipButton.addEventListener('click', () => {
     if (isFront) {
         pauseAudio();
-        flipCardToBack(formatName(audioFiles[currentIndex]));
+        flipCardToBack(formatName(audioFiles[currentMode][currentIndex]));
     }
     else {
         flipCardToFront();
-        playAudio(audioFiles[currentIndex]);
+        playAudio(audioFiles[currentMode][currentIndex]);
     }
 });
 
@@ -219,36 +231,16 @@ flashcard.addEventListener('click', () => {
     }
 });
 
-// Dodaj tę funkcję:
-function toggleAnswerVisibility() {
-    if (toggleAnswers.checked) {
-        answerButtons.style.display = 'grid';
-    }
-    else {
-        answerButtons.style.display = 'none';
-    }
-}
 
-// Dodaj event listener:
 toggleAnswers.addEventListener('change', toggleAnswerVisibility);
 
 
 pauseButton.addEventListener('click', () => pauseAudio());
-playButton.addEventListener('click', () => playAudio(audioFiles[currentIndex]));
-
-window.addEventListener('load', loadNewCard);
+playButton.addEventListener('click', () => playAudio(audioFiles[currentMode][currentIndex]));
 
 
-function switchMode() {
-    currentMode = modeToggle.checked ? 'pluca' : 'serce';
-    // Resetujemy stan
-    currentIndex = -1;
-    // Generujemy nowe unikalne nazwy dla aktualnego trybu
-    allNamesShortUnique = Array.from(
-        new Set(audioFiles[currentMode].map(formatName).map(name => getFirstWords(name, 2)))
-    );
-    // Ładujemy nową kartę
-    loadNewCard();
-}
+
 
 modeToggle.addEventListener('change', switchMode);
+
+window.addEventListener('load', loadNewCard);
