@@ -161,7 +161,7 @@ body {
     content: '';
     position: absolute;
     top: 0;
-    right: 0; /* zaczynamy z prawej */
+    right: 0;
     height: 100%;
     width: 100%;
     background-color: #fbeeb3;
@@ -225,4 +225,147 @@ body {
 .next-button:hover {
     /*background-color: #0056b3;*/
     filter: brightness(.85);
+}
+
+/* Dodaj na końcu pliku CSS */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #28a745;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.toggle-label {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Dodaj na końcu pliku CSS */
+.mode-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    justify-content: center;
+}
+
+.mode-switch {
+    position: relative;
+    display: inline-block;
+    width: 120px;
+    height: 34px;
+}
+
+.mode-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.mode-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #8a0d0d;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.mode-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 50px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+input:checked + .mode-slider {
+    background-color: #498cbf;
+}
+
+input:checked + .mode-slider:before {
+    transform: translateX(62px);
+}
+
+.mode-text {
+    position: absolute;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: bold;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.mode-text-left {
+    left: 10px;
+}
+
+.mode-text-right {
+    right: 10px;
+}
+
+.mode-label {
+    font-size: 1rem;
+    color: #333;
+    font-weight: bold;
 }

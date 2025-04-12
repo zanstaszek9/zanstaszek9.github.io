@@ -1,28 +1,56 @@
-const audioFiles = [
-    `01.Prawidłowe-tony-serca-koniuszek-serca.mp3`,
-    `02.Rozdwojenie-pierwszego-tonu-serca-koniuszek-serca.mp3`,
-    `03.-Szmer-wczesnoskurczowy-z-p-max-nad-koniuszkiem-serca.mp3`,
-    `04.Szmer-śródskurczowy-z-p-max-nad-koniuszkiem-serca.mp3`,
-    `06.Szmer-holosystoliczny-z-p-max-nad-koniuszkiem-serca.mp3`,
-    `07.Rytm_cwalowy_ton_IV.mp3`,
-    `08.Szmer-skurczowy-z-p-max-nad-z-aortalną.mp3`,
-    `09.Szmer-skurczowy-z-p-max-nad-z-aortalna-rozdwojenie-drugiego-tonu-serca.mp3`,
-    `10.Prawidłowe-tony-serca-z-aortalna.mp3`,
-    `11.Szmer-skurczowy-z-p-max-nad-z-pnia-płucnego.mp3`,
-    `12.Szmer-skurczowy-z-p-max-w-punkcie-Erba-sztywne-rozdwojenie-drugiego-tonu-serca.mp3`,
-    `13.Szmer-holodiastoliczny-decrescendo-oraz-szmer-wczesnoskurczowy-z-p-max-nad-z-aortalną.mp3`,
-    `14.Szmer-rozkurczowy-z-p-max-nad-z-aortalną.mp3`,
-    `15.Szmer-maszynowy.mp3`,
-    `16.Trzask-śródszkurczowy-następujący-po-nim-szmer-skurczowy-z-p-max-nad-koniuszkiem-serca.mp3`,
-    `17.Szmer-rozkurczowy-z-p-max-nad-koniuszkiem-serca.mp3`,
-    `18.Szmer-skurczowy-holosystoliczny-z-p-max-w-punkcie-Erba.mp3`,
-];
+const audioFiles = {
+    serce: [
+        `01.Prawidłowe-tony-serca-koniuszek-serca.mp3`,
+        `02.Rozdwojenie-pierwszego-tonu-serca-koniuszek-serca.mp3`,
+        `03.-Szmer-wczesnoskurczowy-z-p-max-nad-koniuszkiem-serca.mp3`,
+        `04.Szmer-śródskurczowy-z-p-max-nad-koniuszkiem-serca.mp3`,
+        `06.Szmer-holosystoliczny-z-p-max-nad-koniuszkiem-serca.mp3`,
+        `07.Rytm_cwalowy_ton_IV.mp3`,
+        `08.Szmer-skurczowy-z-p-max-nad-z-aortalną.mp3`,
+        `09.Szmer-skurczowy-z-p-max-nad-z-aortalna-rozdwojenie-drugiego-tonu-serca.mp3`,
+        `10.Prawidłowe-tony-serca-z-aortalna.mp3`,
+        `11.Szmer-skurczowy-z-p-max-nad-z-pnia-płucnego.mp3`,
+        `12.Szmer-skurczowy-z-p-max-w-punkcie-Erba-sztywne-rozdwojenie-drugiego-tonu-serca.mp3`,
+        `13.Szmer-holodiastoliczny-decrescendo-oraz-szmer-wczesnoskurczowy-z-p-max-nad-z-aortalną.mp3`,
+        `14.Szmer-rozkurczowy-z-p-max-nad-z-aortalną.mp3`,
+        `15.Szmer-maszynowy.mp3`,
+        `16.Trzask-śródszkurczowy-następujący-po-nim-szmer-skurczowy-z-p-max-nad-koniuszkiem-serca.mp3`,
+        `17.Szmer-rozkurczowy-z-p-max-nad-koniuszkiem-serca.mp3`,
+        `18.Szmer-skurczowy-holosystoliczny-z-p-max-w-punkcie-Erba.mp3`,
+    ],
+    pluca: [
+        `1. Obrzek-pluc.mp3`,
+        `2. Stridor.mp3`,
+        `3. Trzeszczenia.mp3`,
+        `4. Rzężenia.mp3`,
+        `5. Oskrzelowy.mp3`,
+        `6. Tarcie opłucnej.mp3`,
+        `7. Świsty.mp3`,
+        `8. Pęcherzykowy.mp3`,
+        `9. Tchawiczy.mp3`,
+        `10. Oskrzelowo – pęcherzykowy.mp3`,
+        `11. Świsty.mp3`,
+        `12. Stridor.mp3`,
+        `13. Trzeszczenia.mp3`,
+        `14. Trzeszczenia.mp3`,
+        `15. Stridor.mp3`,
+        `16. Trzeszczenia.mp3`,
+        `17. Szmer pęcherzykowy.mp3`,
+    ]
+};
 
-const folderPath = 'audio-files/serce/';
+const folderPaths = {
+    serce: 'audio-files/serce/',
+    pluca: 'audio-files/pluca/'
+};
+
+let currentMode = 'serce';
 let currentIndex = -1;
 let cardCounter = 0;
 let audio = document.getElementById('audio');
 let isFront = true;
+const modeToggle = document.getElementById('mode-toggle');
+
 
 const counter = document.getElementById('counter');
 const flashcard = document.getElementById('flashcard');
@@ -33,9 +61,14 @@ const flipButton = document.getElementById('flip-button');
 const pauseButton = document.getElementById('pause-button');
 const playButton = document.getElementById('play-button');
 const nextButton = document.getElementById('next-button');
+const toggleAnswers = document.getElementById('toggle-answers');
 
+let allNamesShortUnique = Array.from(
+    new Set(audioFiles[currentMode].map(formatName).map(name => getFirstWords(name, 2))
+    ));
 
 function formatName(file) {
+    console.log('f: ', file)
     return file
         .replace(/^\d+\.|_|-|\.mp3$/g, ' ')
         .trim();
@@ -43,9 +76,10 @@ function formatName(file) {
 
 
 function playAudio(file) {
-    audio.src = folderPath + file;
+    audio.src = folderPaths[currentMode] + file;
     audio.play();
 }
+
 
 function pauseAudio() {
     audio.pause();
@@ -74,7 +108,7 @@ function flipCardToFront() {
 function getRandomFile(excludeIndex = -1) {
     let idx;
     do {
-        idx = Math.floor(Math.random() * audioFiles.length);
+        idx = Math.floor(Math.random() * audioFiles[currentMode].length);
     } while (idx === excludeIndex);
     return idx;
 }
@@ -89,12 +123,17 @@ function loadNewCard() {
     const newIndex = getRandomFile(currentIndex);
     currentIndex = newIndex;
     cardCounter++;
+    console.log('%%% STZAN1 class: loadNewCard, method: loadNewCard; 2025-04-12');
 
-    const file = audioFiles[currentIndex];
+    const file = audioFiles[currentMode][currentIndex];
+    console.log('%%% STZAN2 class: loadNewCard, method: loadNewCard; 2025-04-12, f: ', file);
+    console.log('%%% STZAN2 class: loadNewCard, method: loadNewCard; 2025-04-12, f: ', currentMode);
+    console.log('%%% STZAN2 class: loadNewCard, method: loadNewCard; 2025-04-12, f: ', currentIndex);
+
     const name = formatName(file);
 
-    counter.textContent = `Przerobione karty: ${cardCounter}`;
 
+    counter.textContent = `Przerobione karty: ${cardCounter}`;
     cardFront.querySelector('p').textContent = 'Kliknij, aby odwrócić...';
     cardBack.querySelector('p').textContent = name;
 
@@ -102,26 +141,35 @@ function loadNewCard() {
     generateAnswerButtons(name);
 }
 
+function getFirstWords(str, wordCount) {
+    const strSplit = str.split(' ');
+    if (strSplit <= wordCount) {
+        return str;
+    }
+    return strSplit.slice(0, wordCount).join(' ');
+}
+
 function generateAnswerButtons(correctName) {
     answerButtons.innerHTML = '';
 
-    const allNames = audioFiles.map(formatName);
-    const wrongOptions = shuffle(allNames.filter(n => n !== correctName)).slice(0, 3);
-    const options = shuffle([correctName, ...wrongOptions]);
+    const shortCorrectName = getFirstWords(correctName, 2);
+
+    const wrongOptions = shuffle([...allNamesShortUnique].filter(n => n !== shortCorrectName)).slice(0, 3);
+    const options = shuffle([shortCorrectName, ...wrongOptions]);
 
     options.forEach(option => {
         const btn = document.createElement('button');
         btn.className = 'answer';
         btn.textContent = option;
-        btn.onclick = () => handleAnswerClick(btn, option, correctName);
+        btn.onclick = () => handleAnswerClick(btn, option, shortCorrectName, correctName);
         answerButtons.appendChild(btn);
     });
 }
 
-function handleAnswerClick(button, chosen, correct) {
+function handleAnswerClick(button, chosen, correctShort, correctLong) {
     if (button.classList.contains('disabled') || button.classList.contains('correct')) return;
 
-    if (chosen === correct) {
+    if (chosen === correctShort) {
         button.classList.add('correct');
         [...answerButtons.children].forEach(btn => {
             if (btn !== button) {
@@ -129,7 +177,7 @@ function handleAnswerClick(button, chosen, correct) {
             }
         });
         pauseAudio();
-        flipCardToBack(correct);
+        flipCardToBack(correctLong);
 
         // Dodaj animację paska ładowania
         nextButton.classList.add('loading-progress');
@@ -137,8 +185,9 @@ function handleAnswerClick(button, chosen, correct) {
         setTimeout(() => {
             nextButton.classList.remove('loading-progress');
             loadNewCard();
-        }, 1800);
-    } else {
+        }, 1500);
+    }
+    else {
         button.classList.add('wrong');
         button.classList.add('disabled');
     }
@@ -149,7 +198,8 @@ flipButton.addEventListener('click', () => {
     if (isFront) {
         pauseAudio();
         flipCardToBack(formatName(audioFiles[currentIndex]));
-    } else {
+    }
+    else {
         flipCardToFront();
         playAudio(audioFiles[currentIndex]);
     }
@@ -162,14 +212,43 @@ nextButton.addEventListener('click', () => {
 
 flashcard.addEventListener('click', () => {
     if (isFront) {
-        flipCardToBack(formatName(audioFiles[currentIndex]));
-    } else {
+        flipCardToBack(formatName(audioFiles[currentMode][currentIndex]));
+    }
+    else {
         flipCardToFront();
     }
 });
+
+// Dodaj tę funkcję:
+function toggleAnswerVisibility() {
+    if (toggleAnswers.checked) {
+        answerButtons.style.display = 'grid';
+    }
+    else {
+        answerButtons.style.display = 'none';
+    }
+}
+
+// Dodaj event listener:
+toggleAnswers.addEventListener('change', toggleAnswerVisibility);
 
 
 pauseButton.addEventListener('click', () => pauseAudio());
 playButton.addEventListener('click', () => playAudio(audioFiles[currentIndex]));
 
 window.addEventListener('load', loadNewCard);
+
+
+function switchMode() {
+    currentMode = modeToggle.checked ? 'pluca' : 'serce';
+    // Resetujemy stan
+    currentIndex = -1;
+    // Generujemy nowe unikalne nazwy dla aktualnego trybu
+    allNamesShortUnique = Array.from(
+        new Set(audioFiles[currentMode].map(formatName).map(name => getFirstWords(name, 2)))
+    );
+    // Ładujemy nową kartę
+    loadNewCard();
+}
+
+modeToggle.addEventListener('change', switchMode);

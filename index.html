@@ -8,11 +8,20 @@
 </head>
 <body>
 
+<div class="mode-toggle-container">
+    <span class="mode-label">Tryb 🩺</span>
+    <label class="mode-switch">
+        <input type="checkbox" id="mode-toggle">
+        <span class="mode-slider round">
+            <span class="mode-text mode-text-left"> Płuca</span>
+            <span class="mode-text mode-text-right">Serce </span>
+        </span>
+    </label>
+</div>
+
 <div class="container">
-    <!-- Licznik fiszek -->
     <div id="counter" class="counter">Przerobione karty: {{counter}}</div>
 
-    <!-- Karta fiszki -->
     <div class="flashcard" id="flashcard">
         <div class="card-inner">
             <div class="card-front" id="card-front">
@@ -24,7 +33,6 @@
         </div>
     </div>
 
-    <!-- Przyciski pod fiszką -->
     <div class="card-buttons">
         <div class="card-buttons audio-buttons">
             <button id="pause-button" class="small-button">⏸️ Wstrzymaj audio</button>
@@ -34,8 +42,14 @@
         <button class="flip-button" id="flip-button">🔄 Obróć fiszkę</button>
     </div>
 
+    <div class="toggle-container">
+        <label class="toggle-switch">
+            <input type="checkbox" id="toggle-answers" checked>
+            <span class="slider round"></span>
+        </label>
+        <span class="toggle-label">Pokaż odpowiedzi</span>
+    </div>
 
-    <!-- Quiz - wybór nazwy -->
     <div class="answer-buttons" id="answer-buttons">
         <button class="answer">Answer...</button>
         <button class="answer">Answer...</button>
