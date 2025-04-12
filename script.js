@@ -217,6 +217,27 @@ flipButton.addEventListener('click', () => {
     }
 });
 
+document.addEventListener('keypress', e => {
+    console.log('sss:', e.keyCode);
+    if (e.keyCode === 32) {
+        flipCard();
+    }
+    else if (e.keyCode === 13) {
+        loadNewCard();
+    }
+
+});
+
+
+function flipCard(){
+    if (isFront) {
+        flipCardToBack(formatName(audioFiles[currentMode][currentIndex]));
+    }
+    else {
+        flipCardToFront();
+    }
+}
+
 nextButton.addEventListener('click', () => {
     loadNewCard();
 });
