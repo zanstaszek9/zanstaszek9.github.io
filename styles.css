@@ -1,0 +1,228 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
+}
+
+.counter {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.flashcard {
+    width: 100%;
+    height: 200px;
+    perspective: 1000px;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+.flashcard.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    backface-visibility: hidden;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    padding: 20px;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    background-color: #eef5ff;
+}
+
+.card-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.flip-button {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+.answer-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.answer {
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #e0e0e0;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.answer.correct {
+    background-color: #28a745;
+    color: white;
+}
+
+.answer.wrong {
+    background-color: #f44336; /* czerwony */
+    color: white;
+    cursor: not-allowed;
+}
+
+.answer.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.next-button-container {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.next-button {
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    width: 100%;
+}
+
+.next-button.highlighted {
+    background-color: #FCc107;
+    color: black;
+    animation: pulse 1s infinite ease-in-out;
+    transform: scale(1.1);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1.1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+.next-button.loading-progress::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0; /* zaczynamy z prawej */
+    height: 100%;
+    width: 100%;
+    background-color: #fbeeb3;
+    animation: progressBar 1.8s linear forwards;
+    border-radius: 8px;
+    z-index: 1;
+}
+
+.next-button.loading-progress {
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes progressBar {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+
+.next-button span {
+    position: relative;
+    z-index: 2;
+}
+
+
+
+.audio-buttons {
+    display: flex;
+    flex-direction: row; /* Upewniamy się że nie dziedziczy 'column' */
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.small-button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #5a6268;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    flex: 1; /* żeby zajmowały równo przestrzeń, ale można też usunąć */
+    max-width: 50%;
+}
+
+
+.small-button:hover {
+    filter: brightness(.85);
+}
+
+.flip-button:hover {
+    filter: brightness(.85);
+}
+
+.next-button:hover {
+    /*background-color: #0056b3;*/
+    filter: brightness(.85);
+}

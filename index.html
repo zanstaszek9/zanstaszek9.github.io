@@ -1,10 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fiszki Audio</title>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    Hello world
+
+<div class="container">
+    <!-- Licznik fiszek -->
+    <div id="counter" class="counter">Przerobione karty: {{counter}}</div>
+
+    <!-- Karta fiszki -->
+    <div class="flashcard" id="flashcard">
+        <div class="card-inner">
+            <div class="card-front" id="card-front">
+                <p>Kliknij, aby odwrócić...</p>
+            </div>
+            <div class="card-back" id="card-back">
+                <p>Plik...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Przyciski pod fiszką -->
+    <div class="card-buttons">
+        <div class="card-buttons audio-buttons">
+            <button id="pause-button" class="small-button">⏸️ Wstrzymaj audio</button>
+            <button id="play-button" class="small-button">▶️ Odtwórz audio</button>
+        </div>
+        <button id="next-button" class="next-button"><span class="next-button-text">⏩ Następna</span></button>
+        <button class="flip-button" id="flip-button">🔄 Obróć fiszkę</button>
+    </div>
+
+
+    <!-- Quiz - wybór nazwy -->
+    <div class="answer-buttons" id="answer-buttons">
+        <button class="answer">Answer...</button>
+        <button class="answer">Answer...</button>
+        <button class="answer">Answer...</button>
+        <button class="answer">Answer...</button>
+    </div>
+</div>
+
+<audio id="audio" loop></audio>
+
+<script src="script.js"></script>
 </body>
 </html>
