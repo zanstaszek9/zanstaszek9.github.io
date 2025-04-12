@@ -369,3 +369,9 @@ input:checked + .mode-slider:before {
     color: #333;
     font-weight: bold;
 }
+
+.version {
+    bottom: 0%;
+    position: fixed;
+    font-size: 0.7em;
+}
