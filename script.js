@@ -28,7 +28,7 @@ const audioFiles = {
         `7. Świsty.mp3`,
         `8. Pęcherzykowy.mp3`,
         `9. Tchawiczy.mp3`,
-        `10. Oskrzelowo – pęcherzykowy.mp3`,
+        `10. Oskrzelowo–pęcherzykowy.mp3`,
         `11. Świsty.mp3`,
         `12. Stridor.mp3`,
         `13. Trzeszczenia.mp3`,
@@ -88,9 +88,10 @@ function flipCardToBack(text) {
     cardBack.querySelector('p').textContent = text;
     flashcard.classList.add('flipped');
     isFront = false;
+    const textShort = getFirstWords(text, 2);
     [...answerButtons.children].forEach(btn => {
         btn.classList.add('disabled');
-        if (btn.textContent === text) {
+        if (btn.textContent === textShort) {
             btn.classList.remove('wrong');
             btn.classList.add('correct');
         }
@@ -116,18 +117,25 @@ function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
 }
 
+function putCounterToLocalStorage() {
+    let totalStorage = parseInt(localStorage.getItem('cardCounter') ?? 0);
+    localStorage.setItem('cardCounter', (++totalStorage).toString());
+    return totalStorage;
+}
+
 function loadNewCard() {
     if (!isFront) flipCardToFront();
     nextButton.classList.remove('highlighted');
     const newIndex = getRandomFile(currentIndex);
     currentIndex = newIndex;
     cardCounter++;
+    let totalStorage = putCounterToLocalStorage();
 
     const file = audioFiles[currentMode][currentIndex];
     const name = formatName(file);
 
 
-    counter.textContent = `Przerobione karty: ${cardCounter}`;
+    counter.textContent = `Przerobione karty teraz: ${cardCounter} | Całkowicie: ${totalStorage}`;
     cardFront.querySelector('p').textContent = 'Kliknij, aby odwrócić...';
     cardBack.querySelector('p').textContent = name;
 
@@ -217,12 +225,12 @@ flipButton.addEventListener('click', () => {
     }
 });
 
-document.addEventListener('keypress', e => {
+document.addEventListener('keydown', e => {
     console.log('sss:', e.keyCode);
-    if (e.keyCode === 32) {
+    if (e.keyCode === 32) { // space
         flipCard();
     }
-    else if (e.keyCode === 13) {
+    else if (e.keyCode === 13) {    // enter
         loadNewCard();
     }
 
@@ -244,12 +252,7 @@ nextButton.addEventListener('click', () => {
 
 
 flashcard.addEventListener('click', () => {
-    if (isFront) {
-        flipCardToBack(formatName(audioFiles[currentMode][currentIndex]));
-    }
-    else {
-        flipCardToFront();
-    }
+    flipCard()
 });
 
 
